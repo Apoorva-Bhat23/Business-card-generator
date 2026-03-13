@@ -1,17 +1,10 @@
 
-
 # Business Card Generator
-
-[![CI/CD](https://github.com/rclement/business-card-generator/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rclement/business-card-generator/actions/workflows/ci-cd.yml)
-[![License](https://img.shields.io/github/license/rclement/business-card-generator)](https://github.com/rmnclmnt/business-card-generator/blob/master/LICENSE)
 
 Everyone needs a business card. Or multiple ones. Or in multiple formats.
 Might as well be able to generate them on the fly.
 
 This software allows to generate digital QR-code business cards:
-
-- [MeCard](https://en.wikipedia.org/wiki/MeCard_(QR_code))
-- [vCard](https://en.wikipedia.org/wiki/VCard)
 
 ## Usage
 
@@ -23,11 +16,6 @@ You can also integrate URLs for website/keynotes integration using the following
 ```
 https://business-card-generator.vercel.app/<card-type>.<card-format>?<card-parameters>
 ```
-
-Available card types:
-
-- `vcard`
-- `mecard`
 
 Available card formats:
 
