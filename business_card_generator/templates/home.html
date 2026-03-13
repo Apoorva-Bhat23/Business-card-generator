@@ -1,0 +1,431 @@
+{% extends "_base.html" %}
+
+{%- macro field_error(field_name) -%}
+{%- if field_errors and field_errors.get(field_name) %}
+<p class="help is-danger">{{ field_errors[field_name] }}</p>
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro input_class(field_name) -%}
+input{% if field_errors and field_errors.get(field_name) %} is-danger{% endif %}
+{%- endmacro -%}
+
+{%- block content %}
+<section class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container content">
+      <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+          <h1>
+            {{ config.about.name }} <!-- <span class="has-text-weight-light is-size-6">({{ config.about.version }})</span> --> <!--to remove the 0.5.2 version-->
+          </h1>
+
+          <p>
+            Generate QR based digital business cards for SBI, HDFC, ICICI and Axis Bank.
+          </p>
+
+          <hr>
+
+          <form method="POST" action="{{ url_for('views.post_home') }}">
+            <!-- <div class="field is-horizontal">
+              <div class="field-label">
+                <label class="label">Card Type</label>
+              </div>
+              <div class="field-body">
+                <div class="control">
+                  <label class="radio">
+                    <input
+                      type="radio"
+                      name="card_type"
+                      value="vcard"
+                      {%- if not card_type or card_type == 'vcard' %} checked{% endif %}
+                    >
+                    vCard
+                  </label>
+                  <label class="radio">
+                    <input
+                      type="radio"
+                      name="card_type"
+                      value="mecard"
+                      {%- if card_type == 'mecard' %} checked{% endif %}
+                    >
+                    MeCard
+                  </label>
+                </div>
+              </div>
+            </div> -->
+
+            <div class="field is-horizontal">
+  <div class="field-label">
+    <label class="label">Select Bank</label>
+  </div>
+
+  <div class="field-body">
+    <div class="field is-grouped">
+
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="bank" value="sbi" checked>
+          SBI
+        </label>
+      </div>
+
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="bank" value="hdfc">
+          HDFC
+        </label>
+      </div>
+
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="bank" value="icici">
+          ICICI
+        </label>
+      </div>
+
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="bank" value="axis">
+          AXIS
+        </label>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Profile</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('firstname') }}"
+                      type="text"
+                      placeholder="First Name"
+                      name="firstname"
+                      value="{{ card_params.firstname if card_params else '' }}"
+                      required
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/user.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('firstname') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('lastname') }}"
+                      type="text"
+                      placeholder="Last Name"
+                      name="lastname"
+                      value="{{ card_params.lastname if card_params else '' }}"
+                      required
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/user.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('lastname') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('nickname') }}"
+                      type="text"
+                      placeholder="Nickname"
+                      name="nickname"
+                      value="{{ card_params.nickname if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/user.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('nickname') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('picture') }}"
+                      type="text"
+                      placeholder="Picture URL"
+                      name="picture"
+                      value="{{ card_params.picture if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/image.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('picture') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Birthday</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('birthday') }}"
+                      type="date"
+                      name="birthday"
+                      value="{{ card_params.birthday if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/calendar.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('birthday') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Organization</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('company') }}"
+                      type="text"
+                      placeholder="Company"
+                      name="company"
+                      value="{{ card_params.company if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/building.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('company') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('job') }}"
+                      type="text"
+                      placeholder="Job"
+                      name="job"
+                      value="{{ card_params.job if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/briefcase.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('job') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('email') }}"
+                      type="email"
+                      placeholder="Email"
+                      name="email"
+                      value="{{ card_params.email if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/at-sign.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('email') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('phone') }}"
+                      type="text"
+                      placeholder="Phone"
+                      name="phone"
+                      value="{{ card_params.phone if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/phone.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('phone') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('cellphone') }}"
+                      type="text"
+                      placeholder="Cellphone"
+                      name="cellphone"
+                      value="{{ card_params.cellphone if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/smartphone.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('phone') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('website') }}"
+                      type="text"
+                      placeholder="Website"
+                      name="website"
+                      value="{{ card_params.website if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/link.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('website') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Address</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('street') }}"
+                      type="text"
+                      placeholder="Street"
+                      name="street"
+                      value="{{ card_params.street if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('street') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('city') }}"
+                      type="text"
+                      placeholder="City"
+                      name="city"
+                      value="{{ card_params.city if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('city') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('zipcode') }}"
+                      type="text"
+                      placeholder="Zipcode"
+                      name="zipcode"
+                      value="{{ card_params.zipcode if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('zipcode') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('state') }}"
+                      type="text"
+                      placeholder="State"
+                      name="state"
+                      value="{{ card_params.state if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('state') }}
+                </div>
+
+                <div class="field">
+                  <div class="control has-icons-left">
+                    <input
+                      class="{{ input_class('country') }}"
+                      type="text"
+                      placeholder="Country"
+                      name="country"
+                      value="{{ card_params.country if card_params else '' }}"
+                    >
+                    <span class="icon is-small is-left">
+                      <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                    </span>
+                  </div>
+                  {{ field_error('country') }}
+                </div>
+              </div>
+            </div>
+            
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-fullwidth" type="submit">
+                      <span class="icon">
+                        <img src="{{ url_for('static', filename='icons/send.svg') }}">
+                      </span>
+                      <span>Generate</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</section>
+{%- endblock %}

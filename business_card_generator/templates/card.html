@@ -1,0 +1,209 @@
+{% extends "_base.html" %} 
+<!-- This page uses the base template layout -->
+
+{%- block content %} 
+<!-- Start of the main content section -->
+
+{% set params = request.values %} 
+<!-- Store all form inputs (name, email, bank, etc.) into a variable called params -->
+
+{% if params.card_type == 'vcard' %}
+  <!-- If the user selected VCARD format -->
+
+  {% set svg_url = url_for('views.get_vcard_svg', **params) %}
+  <!-- Generate QR code in SVG format -->
+
+  {% set png_url = url_for('views.get_vcard_png', **params) %}
+  <!-- Generate QR code in PNG format -->
+
+  {% set vcf_url = url_for('views.get_vcard_vcf', **params) %}
+  <!-- Generate downloadable VCF contact file -->
+
+{% elif params.card_type == 'mecard' %}
+  <!-- If the user selected MECARD format -->
+
+  {% set svg_url = url_for('views.get_mecard_svg', **params) %}
+  <!-- Generate QR code SVG for mecard -->
+
+  {% set png_url = url_for('views.get_mecard_png', **params) %}
+  <!-- Generate PNG QR code -->
+
+  {% set vcf_url = url_for('views.get_mecard_vcf', **params) %}
+  <!-- Generate VCF contact file -->
+
+{% endif %}
+
+<style>
+
+/* Main business card design */
+.business-card{
+    background:rgba(255, 255, 255, 0.625); /* semi-transparent white card */
+    border-radius:12px; /* rounded corners */
+    padding:30px; /* space inside the card */
+    box-shadow:0 8px 25px rgba(0,0,0,0.15); /* shadow effect */
+}
+
+/* Layout of card (details left, QR right) */
+.card-layout{
+    display:flex; /* flex layout */
+    align-items:center; /* vertically align items */
+    justify-content:space-between; /* space between details and QR */
+}
+
+/* Left side details section */
+.details{
+    width:75%; /* takes 65% of card width */
+}
+
+/* QR code size */
+.qr-code img{
+    width:180px; /* size of QR code */
+}
+
+/* Right section containing QR and bank logo */
+.qr-section{
+    width:25%; /* section width */
+    text-align:center; /* center align QR and logo */
+}
+
+/* Bank logo below QR code */
+.bank-logo{
+    display:block; /* show logo as block */
+    margin:4px auto 0 auto; /* reduce gap between logo and QR */
+    width:40px; /* logo size */
+}
+
+/* Person name style */
+.person-name{
+    font-size:26px; /* bigger text */
+    font-weight:600; /* bold */
+}
+
+/* Information rows spacing */
+.info{
+    margin-top:8px; /* small space between lines */
+}
+
+</style>
+
+<section class="hero is-fullheight">
+<!-- Full page height section -->
+
+<div class="hero-body">
+<div class="container">
+<div class="columns">
+<div class="column is-half is-offset-one-quarter">
+<!-- Center the card on the page -->
+
+<div class="business-card">
+<!-- Business card container -->
+
+<div class="card-layout">
+<!-- Card layout (left details + right QR) -->
+
+<!-- LEFT DETAILS -->
+<div class="details">
+
+<p class="person-name">
+{{ params.firstname }} {{ params.lastname }}
+</p>
+<!-- Display person's full name -->
+
+<p><strong>Selected Bank:</strong> {{ params.bank|upper }}</p>
+<!-- Show selected bank -->
+
+{% if params.company %}
+<div class="info"><strong>Company:</strong> {{ params.company }}</div>
+{% endif %}
+<!-- Show company if provided -->
+
+{% if params.job %}
+<div class="info"><strong>Role:</strong> {{ params.job }}</div>
+{% endif %}
+<!-- Show job role -->
+
+{% if params.email %}
+<div class="info"><strong>Email:</strong> {{ params.email }}</div>
+{% endif %}
+<!-- Show email -->
+
+{% if params.phone %}
+<div class="info"><strong>Phone:</strong> {{ params.phone }}</div>
+{% endif %}
+<!-- Show phone number -->
+
+{% if params.website %}
+<div class="info"><strong>Website:</strong> {{ params.website }}</div>
+{% endif %}
+<!-- Show website -->
+
+{% if params.city %}
+<div class="info">
+<strong>Location:</strong>
+{{ params.city }}, {{ params.country }}
+</div>
+{% endif %}
+<!-- Show city and country -->
+
+</div>
+
+<!-- QR CODE RIGHT -->
+<div class="qr-section">
+
+<img class="qr-code" src="{{ svg_url }}">
+<!-- Display generated QR code -->
+
+{% if params.bank == 'sbi' %}
+<img class="bank-logo" src="{{ url_for('static', filename='banks/sbi.png') }}">
+<!-- display SBI logo -->
+
+{% elif params.bank == 'hdfc' %}
+<img class="bank-logo" src="{{ url_for('static', filename='banks/hdfc.png') }}">
+<!-- Show HDFC logo -->
+
+{% elif params.bank == 'icici' %}
+<img class="bank-logo" src="{{ url_for('static', filename='banks/icici.png') }}">
+<!-- Show ICICI logo -->
+
+{% elif params.bank == 'axis' %}
+<img class="bank-logo" src="{{ url_for('static', filename='banks/axis.png') }}">
+<!-- Show Axis bank logo -->
+
+{% endif %}
+
+</div>
+
+</div>
+
+<hr>
+<!-- Line separator -->
+
+<div style="text-align:center">
+
+<a class="button is-small" href="{{ url_for('views.get_home', **params) }}">
+Edit
+</a>
+<!-- Button to edit entered details -->
+
+<a class="button is-small is-link" href="{{ png_url }}">
+Download PNG
+</a>
+<!-- Download QR card as PNG -->
+
+<a class="button is-small is-success" href="{{ vcf_url }}">
+Download VCF
+</a>
+<!-- Download contact file -->
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+{%- endblock %}
+<!-- End of content block -->

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- Tells the browser this is an HTML5 document -->
+
+<html>
+<!-- Start of the HTML page -->
+
+<head>
+<!-- Head section contains page settings, title, CSS etc -->
+
+<meta charset="utf-8">
+<!-- Allows the page to display most characters properly -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Makes the page responsive on mobile and different screen sizes -->
+
+<title>Business Card Generator</title>
+<!-- Title shown in the browser tab -->
+
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma.min.css') }}">
+<!-- Loads Bulma CSS framework from the static folder for styling -->
+
+<style>
+
+/* Background image for the entire webpage */
+body{
+    background-image: url("{{ url_for('static', filename='images/bg.jpg') }}");
+    /* Loads background image from static/images folder */
+
+    background-size: cover;
+    /* Makes the image cover the entire screen */
+
+    background-position: center;
+    /* Keeps the image centered */
+
+    background-attachment: fixed;
+    /* Keeps the background fixed when scrolling */
+}
+
+/* Radio button spacing for selecting bank */
+.radio{
+margin-right:50px; /* reduces space between radio buttons */
+}
+
+/* Company logo styling */
+.company-logo{
+    position: absolute;
+    /* Positions the logo relative to the page */
+
+    top: 15px;
+    /* Distance from the top of the page */
+
+    left: 30px;
+    /* Distance from the left side of the page */
+}
+
+/* Size of the company logo image */
+.company-logo img{
+    height: 110px;
+    /* Sets the height of the logo image */
+}
+
+</style>
+<!-- End of CSS styling -->
+
+</head>
+
+<body>
+<!-- Start of visible webpage content -->
+
+<div class="company-logo">
+<!-- Container that holds the company logo -->
+
+<img src="{{ url_for('static', filename='images/logo.png') }}">
+<!-- Displays the company logo from static/images folder -->
+</div>
+
+{%- block content %}{%- endblock %}
+<!-- Placeholder where other pages (like card.html or home.html) will insert their content -->
+</body>
+<!-- End of visible webpage content -->
+</html>
+<!-- End of HTML document -->
