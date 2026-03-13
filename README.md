@@ -1,4 +1,4 @@
-![Banner QR Card](https://business-card-generator.vercel.app/vcard.svg?firstname=Romain&lastname=Clement&picture=https%3A%2F%2Fromain-clement.net%2Fstatic%2Ficon.png&company=Freelance&job=Software+|+Data+|+AI&email=contact%2Bgithub%40romain-clement.net&phone=&website=https%3A%2F%2Fromain-clement.net)
+
 
 # Business Card Generator
 
